@@ -1,16 +1,16 @@
 Name:		node_exporter
-Version:	0.17.0	
+Version:	0.17.0
 Release:	1%{?dist}
 Summary:	node_exporter
 
-Group:		prometheus	
-License:	GPL	
-URL:		http://prometheus.io	
-Source0:	node_exporter-0.17.0.tar.gz	
+Group:		prometheus
+License:	GPL
+URL:		http://prometheus.io
+Source0:	node_exporter-0.17.0.tar.gz
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
-BuildRequires:	chkconfig	
-Requires:	chkconfig	
+BuildRequires:  daemonize
+Requires:	daemonize
 
 %description
 prometheus agent package
@@ -24,8 +24,10 @@ prometheus agent package
 %install
 rm -rf %{buildroot}
 install -d %{buildroot}/usr/local/%{name}
-install -d %{buildroot}/var/log/prometheus
 install -d %{buildroot}/var/run/prometheus
+install -d %{buildroot}/var/log/prometheus
+install -d %{buildroot}/usr/local/%{name}/script
+install -p -D %{_sourcedir}/%{name}				%{buildroot}/usr/local/%{name}/script/node_exporter.sh
 install -p -D %{_builddir}/%{name}-%{version}/NOTICE		%{buildroot}/usr/local/%{name}/NOTICE
 install -p -D %{_builddir}/%{name}-%{version}/LICENSE		%{buildroot}/usr/local/%{name}/LICENSE
 install -p -D %{_builddir}/%{name}-%{version}/node_exporter	%{buildroot}/usr/local/%{name}/node_exporter
@@ -41,6 +43,8 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 /usr/local/%{name}
 /etc/init.d/%{name}
+/var/run/prometheus
+/var/log/prometheus
 
 %changelog
 
